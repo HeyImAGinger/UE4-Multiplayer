@@ -53,13 +53,16 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!IsLocallyControlled())
+	/*if (!IsLocallyControlled())
 	{
 		FRotator NewRotation = CameraComponent->GetRelativeRotation();
 		NewRotation.Pitch = RemoteViewPitch * 360.0f / 255.0f;
 
 		CameraComponent->SetRelativeRotation(NewRotation);
-	}
+	}*/ 
+
+	// ICI J'ai desactivé ça pour essayer de bloqué la rotation pitch des autres personnages
+
 
 
 }
@@ -82,7 +85,7 @@ void AFPSCharacter::Fire()
 		UAnimInstance* AnimInstance = Mesh1PComponent->GetAnimInstance();
 		if (AnimInstance)
 		{
-			AnimInstance->PlaySlotAnimationAsDynamicMontage(FireAnimation, "Arms", 0.0f);
+			AnimInstance->PlaySlotAnimationAsDynamicMontage(FireAnimation, "arms", 0.0f);
 		}
 	}
 }
@@ -92,16 +95,21 @@ void AFPSCharacter::ServerFire_Implementation()
 	// try and fire a projectile
 	if (ProjectileClass)
 	{
-		FVector MuzzleLocation = GunMeshComponent->GetSocketLocation("Muzzle");
-		FRotator MuzzleRotation = GunMeshComponent->GetSocketRotation("Muzzle");
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+			{
+				FVector MuzzleLocation = GunMeshComponent->GetSocketLocation("Muzzle");
+				FRotator MuzzleRotation = GunMeshComponent->GetSocketRotation("Muzzle");
 
-		//Set Spawn Collision Handling Override
-		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-		ActorSpawnParams.Instigator = this;
+				//Set Spawn Collision Handling Override
+				FActorSpawnParameters ActorSpawnParams;
+				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+				ActorSpawnParams.Instigator = this;
 
-		// spawn the projectile at the muzzle
-		GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
+				// spawn the projectile at the muzzle
+				GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
+			}, 0.1, false);
+
 	}
 }
 
@@ -117,7 +125,7 @@ void AFPSCharacter::MoveForward(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), Value);
-		//OnPlayerMoving();
+		OnPlayerMoving();
 	}
 }
 
@@ -128,7 +136,7 @@ void AFPSCharacter::MoveRight(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
-		//OnPlayerMoving();
+		OnPlayerMoving();
 	}
 }
 
