@@ -61,7 +61,7 @@ void AFPSCharacter::Tick(float DeltaTime)
 		CameraComponent->SetRelativeRotation(NewRotation);
 	}*/ 
 
-	// ICI J'ai desactivé ça pour essayer de bloqué la rotation pitch des autres personnages
+	// ICI J'ai desactivï¿½ ï¿½a pour essayer de bloquï¿½ la rotation pitch des autres personnages
 
 
 
@@ -90,6 +90,8 @@ void AFPSCharacter::Fire()
 	}
 }
 
+
+
 void AFPSCharacter::ServerFire_Implementation()
 {
 	// try and fire a projectile
@@ -108,9 +110,9 @@ void AFPSCharacter::ServerFire_Implementation()
 
 				// spawn the projectile at the muzzle
 				GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
-			}, 0.1, false);
-
+			}, 0.8, false);
 	}
+	//Multi_OnFire();
 }
 
 bool AFPSCharacter::ServerFire_Validate()
@@ -148,3 +150,27 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutL
 
 	//DOREPLIFETIME_CONDITION(AFPSCharacter, IscarryingObjective, COND_OwnerOnly);
 }
+
+
+
+
+/*void AFPSCharacter::Multi_OnFire_Implementation()
+{
+	// try and play the sound if specified
+	if (FireSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+	}
+
+	// try and play a firing animation if specified
+	if (FireAnimation)
+	{
+		// Get the animation object for the arms mesh
+		UAnimInstance* AnimInstance = Mesh1PComponent->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->PlaySlotAnimationAsDynamicMontage(FireAnimation, "arms", 0.0f);
+		}
+	}
+
+}*/

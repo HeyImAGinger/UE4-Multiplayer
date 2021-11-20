@@ -62,7 +62,10 @@ protected:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerFire();
-
+	/*
+	UFUNCTION(NetMulticast, Reliable)
+	void Multi_OnFire();
+*/
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);
 
@@ -70,6 +73,8 @@ protected:
 	void MoveRight(float Val);
 
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	
+	
 
 public:
 	/** Returns Mesh1P subobject **/

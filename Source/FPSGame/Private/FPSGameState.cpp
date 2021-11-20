@@ -10,7 +10,7 @@ void AFPSGameState::MulticastOnMissionComplete_Implementation(APawn* InstigatorP
 {
 	for (TActorIterator<APawn> It(GetWorld()); It; ++It)
 	{
-AFPSPlayerController* PC = Cast<AFPSPlayerController>(It->Controller);
+		AFPSPlayerController* PC = Cast<AFPSPlayerController>(It->Controller);
 		if (PC && PC->IsLocalController())
 		{
 			PC->OnMissionCompleted(InstigatorPawn, IsMissionSuccess);
