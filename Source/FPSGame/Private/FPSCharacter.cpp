@@ -12,23 +12,25 @@
 
 AFPSCharacter::AFPSCharacter()
 {
-	// Create a CameraComponent	
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	CameraComponent->SetupAttachment(GetCapsuleComponent());
-	CameraComponent->SetRelativeLocation(FVector(0, 0, BaseEyeHeight)); // Position the camera
-	CameraComponent->bUsePawnControlRotation = true;
+
+	
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1PComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh"));
-	Mesh1PComponent->SetupAttachment(CameraComponent);
 	Mesh1PComponent->CastShadow = false;
 	Mesh1PComponent->SetRelativeRotation(FRotator(2.0f, -15.0f, 5.0f));
 	Mesh1PComponent->SetRelativeLocation(FVector(0, 0, -160.0f));
+	Mesh1PComponent->SetupAttachment(GetCapsuleComponent());
 
+	// Create a CameraComponent	
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	CameraComponent->SetupAttachment(Mesh1PComponent);
+	CameraComponent->SetRelativeLocation(FVector(0, 0, BaseEyeHeight)); // Position the camera
+	CameraComponent->bUsePawnControlRotation = true;
 	// Create a gun mesh component
 	GunMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
 	GunMeshComponent->CastShadow = false;
-	GunMeshComponent->SetupAttachment(Mesh1PComponent, "GripPoint");
+	GunMeshComponent->SetupAttachment(CameraComponent);
 
 	NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitter"));
 }
@@ -53,13 +55,13 @@ void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*if (!IsLocallyControlled())
+	if (!IsLocallyControlled())
 	{
 		FRotator NewRotation = CameraComponent->GetRelativeRotation();
 		NewRotation.Pitch = RemoteViewPitch * 360.0f / 255.0f;
 
 		CameraComponent->SetRelativeRotation(NewRotation);
-	}*/ 
+	} 
 
 	// ICI J'ai desactiv� �a pour essayer de bloqu� la rotation pitch des autres personnages
 
