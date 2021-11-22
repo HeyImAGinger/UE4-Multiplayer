@@ -12,25 +12,23 @@
 
 AFPSCharacter::AFPSCharacter()
 {
-
-	
+	// Create a CameraComponent	
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	CameraComponent->SetupAttachment(GetCapsuleComponent());
+	CameraComponent->SetRelativeLocation(FVector(0, 0, BaseEyeHeight)); // Position the camera
+	CameraComponent->bUsePawnControlRotation = true;
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1PComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh"));
+	Mesh1PComponent->SetupAttachment(CameraComponent);
 	Mesh1PComponent->CastShadow = false;
 	Mesh1PComponent->SetRelativeRotation(FRotator(2.0f, -15.0f, 5.0f));
 	Mesh1PComponent->SetRelativeLocation(FVector(0, 0, -160.0f));
-	Mesh1PComponent->SetupAttachment(GetCapsuleComponent());
 
-	// Create a CameraComponent	
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	CameraComponent->SetupAttachment(Mesh1PComponent);
-	CameraComponent->SetRelativeLocation(FVector(0, 0, BaseEyeHeight)); // Position the camera
-	CameraComponent->bUsePawnControlRotation = true;
 	// Create a gun mesh component
 	GunMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
 	GunMeshComponent->CastShadow = false;
-	GunMeshComponent->SetupAttachment(CameraComponent);
+	GunMeshComponent->SetupAttachment(Mesh1PComponent, "GripPoint");
 
 	NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitter"));
 }
@@ -99,22 +97,16 @@ void AFPSCharacter::ServerFire_Implementation()
 	// try and fire a projectile
 	if (ProjectileClass)
 	{
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
-			{
-				FVector MuzzleLocation = GunMeshComponent->GetSocketLocation("Muzzle");
-				FRotator MuzzleRotation = GunMeshComponent->GetSocketRotation("Muzzle");
+		FVector MuzzleLocation = GunMeshComponent->GetSocketLocation("Muzzle");
+		FRotator MuzzleRotation = GunMeshComponent->GetSocketRotation("Muzzle");
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ActorSpawnParams.Instigator = this;
+		// spawn the projectile at the muzzle
+		GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
 
-				//Set Spawn Collision Handling Override
-				FActorSpawnParameters ActorSpawnParams;
-				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-				ActorSpawnParams.Instigator = this;
-
-				// spawn the projectile at the muzzle
-				GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
-			}, 0.8, false);
 	}
-	//Multi_OnFire();
 }
 
 bool AFPSCharacter::ServerFire_Validate()
@@ -155,24 +147,3 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutL
 
 
 
-
-/*void AFPSCharacter::Multi_OnFire_Implementation()
-{
-	// try and play the sound if specified
-	if (FireSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	// try and play a firing animation if specified
-	if (FireAnimation)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1PComponent->GetAnimInstance();
-		if (AnimInstance)
-		{
-			AnimInstance->PlaySlotAnimationAsDynamicMontage(FireAnimation, "arms", 0.0f);
-		}
-	}
-
-}*/
