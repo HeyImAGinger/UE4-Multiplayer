@@ -37,17 +37,17 @@ void AFPSAIGuard::OnPawnSeen(APawn* SeenPawn)
 	DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColorList::Red, false, 10.0f);
 
 	AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
+	FHitResult* OutSweepHitResult = nullptr;
 	if (GameMode)
 	{
-		GameMode->CompleteMission(SeenPawn, false);
+		SeenPawn->K2_SetActorLocation(FVector(-1910.0f, -850.0f, 302.0f), false, *OutSweepHitResult, true);
 	}
 	SetGuardState(EAIState::Alerted);
 }
 
 void AFPSAIGuard::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
-	if (GuardState == EAIState::Alerted)
-		return;
+
 
 	DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColorList::Green, false, 10.0f);
 
@@ -101,4 +101,3 @@ void AFPSAIGuard::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	DOREPLIFETIME(AFPSAIGuard, GuardState);
 
 }
-
