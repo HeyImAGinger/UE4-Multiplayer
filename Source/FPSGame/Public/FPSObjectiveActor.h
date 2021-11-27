@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* PickupFX;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	USoundBase* PickupSound;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

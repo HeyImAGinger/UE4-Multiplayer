@@ -39,7 +39,7 @@ void AFPSProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPr
 {
 
 
-	if (HasAuthority() && (OtherComp->IsSimulatingPhysics() || (OtherActor == NULL) ))
+	if (HasAuthority() && (/*OtherComp->IsSimulatingPhysics() ||*/ (OtherActor != NULL) ))
 	{
 		// Only add impulse and destroy projectile if we hit a physics
 

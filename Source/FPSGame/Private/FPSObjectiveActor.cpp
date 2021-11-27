@@ -29,13 +29,14 @@ void AFPSObjectiveActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayEffects();
+	//PlayEffects();
 
 }
 
 void AFPSObjectiveActor::PlayEffects()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(this, PickupFX, GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
 }
 
 void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)

@@ -40,7 +40,7 @@ void AFPSAIGuard::OnPawnSeen(APawn* SeenPawn)
 	FHitResult* OutSweepHitResult = nullptr;
 	if (GameMode)
 	{
-		SeenPawn->K2_SetActorLocation(FVector(-1910.0f, -850.0f, 302.0f), false, *OutSweepHitResult, true);
+		SeenPawn->K2_SetActorLocation(FVector(0.0f, 2500.0f, 100.0f), false, *OutSweepHitResult, true);
 	}
 	SetGuardState(EAIState::Alerted);
 }

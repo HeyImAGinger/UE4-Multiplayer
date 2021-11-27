@@ -121,7 +121,7 @@ void AFPSCharacter::MoveForward(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), Value);
-		OnPlayerMoving();
+		//OnPlayerMoving();
 	}
 }
 
@@ -132,7 +132,7 @@ void AFPSCharacter::MoveRight(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
-		OnPlayerMoving();
+		//OnPlayerMoving();
 	}
 }
 
