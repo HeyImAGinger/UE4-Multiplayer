@@ -73,8 +73,6 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-*/Assets/*
-
 multimenu/Config/DefaultEditor.ini
 multimenu/Config/DefaultEngine.ini
 multimenu/Config/DefaultGame.ini

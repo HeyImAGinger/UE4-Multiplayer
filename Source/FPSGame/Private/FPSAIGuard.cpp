@@ -42,6 +42,10 @@ void AFPSAIGuard::OnPawnSeen(APawn* SeenPawn)
 	{
 		SeenPawn->K2_SetActorLocation(FVector(0.0f, 2500.0f, 100.0f), false, *OutSweepHitResult, true);
 	}
+
+	GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
+	GetWorldTimerManager().SetTimer(TimerHandle_ResetOrientation, this, &AFPSAIGuard::ResetOrientation, 3.0f);
+
 	SetGuardState(EAIState::Alerted);
 }
 
