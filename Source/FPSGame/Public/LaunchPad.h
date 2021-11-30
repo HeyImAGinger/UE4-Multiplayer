@@ -45,4 +45,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "LaunchPad")
 	UParticleSystem* ActivateLaunchPadEffect;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	USoundBase* LaunchPadSound;
+
 };

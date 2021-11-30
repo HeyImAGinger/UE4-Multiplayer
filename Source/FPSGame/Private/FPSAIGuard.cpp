@@ -34,7 +34,7 @@ void AFPSAIGuard::OnPawnSeen(APawn* SeenPawn)
 	{
 		return;
 	}
-	DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColorList::Red, false, 10.0f);
+	//DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColorList::Red, false, 10.0f);
 
 	AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode());
 	FHitResult* OutSweepHitResult = nullptr;
@@ -44,7 +44,7 @@ void AFPSAIGuard::OnPawnSeen(APawn* SeenPawn)
 	}
 
 	GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
-	GetWorldTimerManager().SetTimer(TimerHandle_ResetOrientation, this, &AFPSAIGuard::ResetOrientation, 3.0f);
+	GetWorldTimerManager().SetTimer(TimerHandle_ResetOrientation, this, &AFPSAIGuard::ResetOrientation, 5.0f);
 
 	SetGuardState(EAIState::Alerted);
 }
@@ -53,7 +53,7 @@ void AFPSAIGuard::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, 
 {
 
 
-	DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColorList::Green, false, 10.0f);
+	//DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColorList::Green, false, 10.0f);
 
 	FVector Direction = Location - GetActorLocation();
 	Direction.Normalize();
@@ -65,7 +65,7 @@ void AFPSAIGuard::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, 
 	SetActorRotation(NewLookAt);
 
 	GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
-	GetWorldTimerManager().SetTimer(TimerHandle_ResetOrientation, this, &AFPSAIGuard::ResetOrientation, 3.0f);
+	GetWorldTimerManager().SetTimer(TimerHandle_ResetOrientation, this, &AFPSAIGuard::ResetOrientation, 5.0f);
 
 	SetGuardState(EAIState::Suspicious);
 }

@@ -39,7 +39,7 @@ void ALaunchPad::OverlapLaunchPad(UPrimitiveComponent* OverlappedComponent, AAct
 	{
 		// Launch Player! Both booleans give consistent launch velocity by ignoring the current player velocity
 		OtherCharacter->LaunchCharacter(LaunchVelocity, true, true);
-
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchPadSound, GetActorLocation());
 		// Spawn FX
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ActivateLaunchPadEffect, GetActorLocation());
 	}
